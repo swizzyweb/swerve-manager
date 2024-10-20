@@ -1,4 +1,6 @@
-# swizzy-dyn-serve-bootstrap
+# swerve
+swizzy-swerve is a bootstrapper for swizzy web services. This package will bootstrap and run
+independent swizzy web services.
 
 ## Usage:
 npm run server <packageName> <port (optional>
