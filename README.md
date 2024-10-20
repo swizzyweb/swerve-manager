@@ -42,3 +42,19 @@ swerve . <port>
 ```
 swerve . 3000
 ```
+
+### Run single file
+```
+swerve /path/to/file.js
+```
+#### ie:
+```
+swerve /absolute/path/to/app.js
+```
+
+or
+
+```
+swerve $(pwd)/dist/app.js
+```
+
