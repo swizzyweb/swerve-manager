@@ -1,0 +1,28 @@
+{
+  "name": "@swizzyweb/swerve",
+  "version": "0.2.0",
+  "description": "",
+  "main": "dist/bootstrap.js",
+  "bin": {
+    "swerve": "./dist/bootstrap.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "server:ts": "ts-node ./src/bootstrap.ts",
+    "server": "node dist/bootstrap.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jason Gallagher",
+  "license": "MIT",
+  "devDependencies": {
+    "@swizzyweb/express": "^4.19.2",
+    "@types/node": "^22.7.7",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "@swizzyweb/browser-toolkit-web-service": "^0.1.0",
+    "@swizzyweb/my-first-web-service": "^0.1.0",
+    "@swizzyweb/swizzy-common": "^0.1.0",
+    "ts-node": "^10.9.2"
+  }
+}
