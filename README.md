@@ -9,7 +9,7 @@ npm run server <packageName> <port (optional>
 npm install -g .
 
 ## Uninstall
-npm uninstall -g @swizzyweb/swizzy-dyn-serve-bootstrap
+npm uninstall -g @swizzyweb/swerve
 
 ## Command
 swerve <packageName> <port (optional)>

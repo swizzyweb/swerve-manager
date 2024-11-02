@@ -3,8 +3,6 @@
 import express, { Request, Response } from '@swizzyweb/express';
 import { BrowserLogger, ILogger } from '@swizzyweb/swizzy-common';
 import { readFileSync } from 'fs';
-// @ts-ignore
-import { SwizzyDynServeFrontendWebService } from '@swizzyweb/swizzy-dyn-serve-frontend-web-service';
 import path from 'path';
 console.log(process.argv[1]);
 function getHelpText() {

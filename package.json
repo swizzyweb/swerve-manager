@@ -1,10 +1,10 @@
 {
   "name": "@swizzyweb/swerve",
-  "version": "0.2.0",
-  "description": "",
+  "version": "0.1.0",
+  "description": "swizzy-swerve is a bootstrapper for swizzy web services. This package will bootstrap and run independent swizzy web services.",
   "main": "dist/bootstrap.js",
   "bin": {
-    "swerve": "./dist/bootstrap.js"
+    "swerve": "dist/bootstrap.js"
   },
   "scripts": {
     "build": "tsc",
@@ -21,8 +21,24 @@
   },
   "dependencies": {
     "@swizzyweb/browser-toolkit-web-service": "^0.1.0",
-    "@swizzyweb/my-first-web-service": "^0.1.0",
     "@swizzyweb/swizzy-common": "^0.1.0",
     "ts-node": "^10.9.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/swizzyweb/swizzy-swerve.git"
+  },
+  "keywords": [
+    "swizzy",
+    "dyn",
+    "serve",
+    "bootsrap",
+    "web",
+    "service",
+    "runner"
+  ],
+  "bugs": {
+    "url": "https://github.com/swizzyweb/swizzy-swerve/issues"
+  },
+  "homepage": "https://github.com/swizzyweb/swizzy-swerve#readme"
 }
