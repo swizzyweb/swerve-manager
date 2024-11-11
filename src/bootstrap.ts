@@ -21,9 +21,9 @@ function getServiceNameFromCurrentDirPackage(logger: ILogger) {
 	};
 }
 
-function getPackageName(logger: ILogger) {
+function getPackageName(serviceName: string|undefined, logger: ILogger) {
 	try {
-		const serviceName = process.argv[2];
+//		const serviceName = process.argv[2];
 		if (!serviceName || serviceName === '.') {
 			return getServiceNameFromCurrentDirPackage(logger);
 		}
@@ -35,7 +35,7 @@ function getPackageName(logger: ILogger) {
 	}
 };
 
-function installWebService(packageName: string, port: number, expressApp: any, logger: ILogger) { // Probably use type of express app
+function installWebService(packageName: string, port: number, expressApp: any, logger: ILogger, serviceArgs: any) { // Probably use type of express app
 	try {
 		logger.info(`Getting webservice package ${packageName} and will run on port ${port}`);
 		const tool = require(packageName as string);
@@ -43,7 +43,7 @@ function installWebService(packageName: string, port: number, expressApp: any, l
 		logger.debug(JSON.stringify(tool));
 	
 		logger.info(`Getting web service from tool...`);
-		const service = tool.getWebservice({app: expressApp});
+		const service = tool.getWebservice({app: expressApp, serviceArgs});
 		logger.info(`Got web service`);
 		logger.info(`Installing web service...`);
 		service.install({});
@@ -59,17 +59,85 @@ function installWebService(packageName: string, port: number, expressApp: any, l
 		exception: ${e}
 		${getHelpText}`;
 	logger.error(`Failed to install web service`);
-	throw new Error(exceptionMessage);
+	throw e; //new Error(exceptionMessage);
 }
 }
+
+interface SwerveArgs {
+  serviceNames: string[];
+  port: number;
+  appDataRoot: string;
+  serviceArgs: any;
+}
+
+function getDefaultArgs(): SwerveArgs {
+  let currentServiceName = undefined;
+
+  return {
+     serviceNames: [],
+    port: 3005,
+    appDataRoot: "",
+    serviceArgs: {}
+  };
+}
+const ARG_PREFIX = '--';
+
+function cliArgToPropertyName(rawArg: string): string {
+  return rawArg.replace(ARG_PREFIX, "");
+}
+
+function getArgs(logger: ILogger): SwerveArgs {
+  const args = process.argv;
+  let argKey = undefined;
+  let swerveArgs = getDefaultArgs();
+  for (let i=2; i<args.length; i++) {
+      const nextVal = args[i];
+      if (argKey) {
+        swerveArgs.serviceArgs[argKey] = nextVal;
+        argKey = undefined;
+        continue;
+      }
+      if (nextVal.startsWith(ARG_PREFIX)) {
+        argKey = cliArgToPropertyName(nextVal);
+        continue;
+      }
+      
+      /*if (nextVal == '.') {
+        swerveArgs.serviceNames.push(getServiceNameFromCurrentDirPackage());
+      }*/
+
+      swerveArgs.serviceNames.push(getPackageName(nextVal, logger));
+  }
+
+  if (swerveArgs.serviceNames.length < 1) {
+    swerveArgs.serviceNames.push(getServiceNameFromCurrentDirPackage(logger));
+  }
+  return swerveArgs;
+}
+
+
+
 const gLogger = new BrowserLogger();
-const PACKAGE_NAME= getPackageName(gLogger);
-const PORT = parseInt(process.argv[3] ?? '3005');
+//const PACKAGE_NAME= getPackageName(gLogger);
+//const PORT = parseInt(process.argv[3] ?? '3005');
 const app = express();
-const webservice = installWebService(PACKAGE_NAME, PORT, app, gLogger);
+
+const args = getArgs(gLogger);
+gLogger.info(`${JSON.stringify(args)}`);
+const PORT = args.serviceArgs.port??3005;
+const webServices = [];
+for(const serviceName of args.serviceNames) {
+  const webservice = installWebService(serviceName, PORT, app, gLogger, args.serviceArgs);
+  webServices.push(webservice);
+}
 
 gLogger.info(`Starting express app...`);
 app.listen(PORT, () => {
-    console.info(`${webservice.name} running on port ${PORT}`);
+    console.info(`${webServices.map((service) => {
+      return service.name;
+  }).join(",")
+      } running on port ${PORT}`);
 });
+
+
 

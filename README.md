@@ -12,20 +12,23 @@ npm install -g .
 npm uninstall -g @swizzyweb/swerve
 
 ## Command
-swerve <packageName> <port (optional)>
+swerve <packageNames>
+
+Swerve can run multiple packages on the same port using a single command.
+Just provide multiple package names space separated.
 
 ## run
-
-### with service and port
 ```
-swerve <service> <port>
+swerve <service> [seriveB serivceC...] [options]
 ```
+#### options
+--port : (optional) port value to run service on
 
 #### ie: 
 ```
-swerve some-service-name 3000
+swerve some-service-name --port=3000
 ```
-
+## 
 ### No args
 This will run the project in the current working directory
 ```
@@ -35,13 +38,14 @@ swerve
 ### Current dir with port
 This will run the server in the current directory with the specified port
 ```
-swerve . <port>
+swerve .
 ```
 
-#### ie:
+#### with port:
 ```
-swerve . 3000
+swerve . --port 3000
 ```
+
 
 ### Run single file
 ```
