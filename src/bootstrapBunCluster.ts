@@ -7,7 +7,7 @@ import { run } from "./main";
 import process from "node:process";
 import { BrowserLogger } from "@swizzyweb/swizzy-common";
 import { getArgs } from "./utils";
-const args = getArgs(new BrowserLogger());
+const args = getArgs(process.argv, new BrowserLogger());
 
 const numThreads = args.serviceArgs?.numThreads ?? os.availableParallelism();
 if (cluster.isPrimary) {

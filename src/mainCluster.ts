@@ -9,9 +9,12 @@ import { BrowserLogger } from "@swizzyweb/swizzy-common";
 import { SwizzyWinstonLogger } from "@swizzyweb/swizzy-web-service";
 
 import { getArgs } from "./utils";
-
+/**
+ * extra arg:
+ * numThreads - number, default to num cpu cores from os
+ * */
 async function runCluster() {
-  const args = getArgs(new BrowserLogger());
+  const args = getArgs(process.argv, new BrowserLogger());
   const logger = new SwizzyWinstonLogger({
     port: args.port,
     //    appDataRoot: args.appDataRoot,

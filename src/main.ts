@@ -20,7 +20,7 @@ export async function run() {
   //const PORT = parseInt(process.argv[3] ?? '3005');
   const app = express();
 
-  const args = getArgs(gLogger);
+  const args = getArgs(process.argv, gLogger);
 
   gLogger = new SwizzyWinstonLogger({
     port: 0,

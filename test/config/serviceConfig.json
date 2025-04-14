@@ -1,0 +1,9 @@
+{
+  "someOtherArgFromConfig": "ThisIsTheArgValue",
+  "someNumberINeed": 100,
+  "shouldTimeout": true,
+  "nestedJson": {
+    "hello": "world",
+    "none": false
+  }
+}

@@ -49,12 +49,22 @@ Note: cluster commands end with c
 
 #### options
 
---port : (optional) port value to run service on
+```
+
+--port : (default 3005) port value to run service
+--appDataRoot - (default project root) path to where appdata root directory will be placed, stores logs and service data
+--numThreads - (default num cpu's reported by os) (cluster only) number of threads to use in the cluster
+
+```
+
+```
 
 #### ie:
 
 ```
+
 swerve some-service-name --port=3000
+
 ```
 
 ##
@@ -64,7 +74,9 @@ swerve some-service-name --port=3000
 This will run the project in the current working directory
 
 ```
+
 swerve
+
 ```
 
 ### Current dir with port
@@ -72,29 +84,95 @@ swerve
 This will run the server in the current directory with the specified port
 
 ```
+
 swerve .
+
 ```
 
 #### with port:
 
 ```
+
 swerve . --port 3000
+
 ```
 
 ### Run single file
 
 ```
+
 swerve /path/to/file.js
+
 ```
 
 #### ie:
 
 ```
+
 swerve /absolute/path/to/app.js
+
 ```
 
 or
 
 ```
+
 swerve $(pwd)/dist/app.js
+
+```
+
+## Additional runtimes
+
+We support bun deno and nodejs for runtimes
+
+```
+
+swerven # node
+swerveb # bun
+swerved # deno
+
+swerven # default (points to swerven as of 0.2.4)
+
+```
+
+## cluster
+
+to run a cluster of your swerve services, you can use the cluster scripts. These are implemented in nodejs, bun, and deno.
+
+### default cluster
+
+```
+
+swervec
+
+```
+
+### nodejs cluster
+
+```
+
+swerven
+
+```
+
+### bun cluster
+
+```
+
+swervebc
+
+```
+
+### deno
+
+```
+
+servedc
+
+```
+
+```
+
+```
+
 ```
