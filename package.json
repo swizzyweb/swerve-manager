@@ -1,6 +1,6 @@
 {
   "name": "@swizzyweb/swerve",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "swizzy-swerve is a bootstrapper for swizzy web services. This package will bootstrap and run independent swizzy web services.",
   "main": "dist/bootstrap.js",
   "bin": {
@@ -21,7 +21,7 @@
     "coverage": "jest --coverage"
   },
   "author": "Jason Gallagher",
-  "license": "MIT",
+  "license": "GPL-3.0-only",
   "devDependencies": {
     "@swizzyweb/express": "^4.19.2",
     "@types/jest": "^29.5.14",
@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@swizzyweb/swizzy-common": "^0.2.1",
-    "@swizzyweb/swizzy-web-service": "^0.2.1",
+    "@swizzyweb/swizzy-web-service": "0.2.3",
     "ts-node": "^10.9.2"
   },
   "repository": {
