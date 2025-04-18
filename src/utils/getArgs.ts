@@ -12,7 +12,7 @@ npm run server <serviceName> <port (optional)>
 		`;
 }
 
-export function getServiceNameFromCurrentDirPackage(logger: ILogger) {
+export function getServiceNameFromCurrentDirPackage(logger: ILogger<any>) {
   try {
     return process.cwd();
   } catch (e) {
@@ -23,7 +23,10 @@ export function getServiceNameFromCurrentDirPackage(logger: ILogger) {
 /**
  *
  * */
-function getAppDataRoot(appDataRootPath: string | undefined, logger: ILogger) {
+function getAppDataRoot(
+  appDataRootPath: string | undefined,
+  logger: ILogger<any>,
+) {
   try {
     //		const serviceName = process.argv[2];
     let directory;
@@ -41,7 +44,7 @@ function getAppDataRoot(appDataRootPath: string | undefined, logger: ILogger) {
   }
 }
 
-function getService(serviceName: string | undefined, logger: ILogger) {
+function getService(serviceName: string | undefined, logger: ILogger<any>) {
   try {
     //		const serviceName = process.argv[2];
     let directory;
@@ -126,7 +129,7 @@ function isTopLevelArg(key: string) {
   return topLevelArgs.has(key);
 }
 
-function parseArgValue(val: string, logger: ILogger) {
+function parseArgValue(val: string, logger: ILogger<any>) {
   try {
     return JSON.parse(val);
   } catch (e) {
@@ -138,7 +141,7 @@ function parseArgValue(val: string, logger: ILogger) {
 }
 
 const DEFAULT_PORT = 3005;
-export function getArgs(args: string[], logger: ILogger): SwerveArgs {
+export function getArgs(args: string[], logger: ILogger<any>): SwerveArgs {
   let argKey = undefined;
   let swerveArgs = getDefaultArgs();
   for (let i = 2; i < args.length; i++) {
