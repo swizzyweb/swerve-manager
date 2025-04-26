@@ -42,7 +42,7 @@ export async function installWebService(
     const service = tool.getWebservice({
       app: expressApp,
       packageName,
-      serviceArgs: { ...serviceArgs, packageJson },
+      serviceArgs: { ...serviceArgs },
       logger,
     });
     logger.info(`Got web service`);

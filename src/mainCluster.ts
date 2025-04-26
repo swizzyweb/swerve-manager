@@ -14,7 +14,7 @@ import { getArgs } from "./utils";
  * numThreads - number, default to num cpu cores from os
  * */
 async function runCluster() {
-  const args = getArgs(process.argv, new BrowserLogger());
+  const args = await getArgs(process.argv, new BrowserLogger());
   const logger = new SwizzyWinstonLogger({
     port: args.port,
     //    appDataRoot: args.appDataRoot,

@@ -16,45 +16,57 @@ export async function run() {
     hostName: os.hostname(),
     pid: process.pid,
   });
-  //const PACKAGE_NAME= getPackageName(gLogger);
-  //const PORT = parseInt(process.argv[3] ?? '3005');
-  const app = express();
 
-  const args = getArgs(process.argv, gLogger);
+  try {
+    //const PACKAGE_NAME= getPackageName(gLogger);
+    //const PORT = parseInt(process.argv[3] ?? '3005');
+    const app = express();
 
-  gLogger = new SwizzyWinstonLogger({
-    port: 0,
-    //    logDir: args.appDataRoot,
-    appName: `[swerve]`,
-    hostName: os.hostname(),
-    pid: process.pid,
-  });
+    const args = await getArgs(process.argv, gLogger);
 
-  gLogger.info(`${JSON.stringify(args)}`);
+    gLogger = new SwizzyWinstonLogger({
+      port: 0,
+      //    logDir: args.appDataRoot,
+      appName: `[swerve]`,
+      hostName: os.hostname(),
+      pid: process.pid,
+    });
 
-  const PORT = args.serviceArgs.port ?? 3005;
-  const webServices = [];
-  for (const service of args.services) {
-    const packageName = service.packageJson.name;
-    const importPathOrName = service.servicePath;
-    const webservice = await installWebService(
-      service.packageJson,
-      importPathOrName,
-      PORT,
-      app,
-      args.serviceArgs,
+    gLogger.info(`${JSON.stringify(args)}`);
+
+    const PORT = args.port ?? 3005;
+    const webServices = [];
+    for (const serviceEntry of Object.entries(args.services)) {
+      const service = serviceEntry[1];
+      const packageName = service.packageJson.name;
+      const importPathOrName = service.servicePath;
+      const webservice = await installWebService(
+        service.packageJson,
+        importPathOrName,
+        PORT,
+        app,
+        {
+          appDataRoot: args.appDataRoot,
+          ...service,
+          ...service.serviceConfiguration,
+        },
+      );
+      webServices.push(webservice);
+    }
+
+    gLogger.info(`Starting express app...`);
+    app.listen(PORT, () => {
+      gLogger.info(
+        `${webServices
+          .map((service) => {
+            return service.name;
+          })
+          .join(",")} running on port ${PORT}`,
+      );
+    });
+  } catch (e) {
+    gLogger.error(
+      `Error occurred initializing service\n ${e.message}\n ${e.stack ?? {}}`,
     );
-    webServices.push(webservice);
   }
-
-  gLogger.info(`Starting express app...`);
-  app.listen(PORT, () => {
-    gLogger.info(
-      `${webServices
-        .map((service) => {
-          return service.name;
-        })
-        .join(",")} running on port ${PORT}`,
-    );
-  });
 }
