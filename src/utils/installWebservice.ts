@@ -39,7 +39,7 @@ export async function installWebService(
     logger.debug(JSON.stringify(tool));
 
     logger.info(`Getting web service from tool...`);
-    const service = tool.getWebservice({
+    const service = await tool.getWebservice({
       app: expressApp,
       packageName,
       serviceArgs: { ...serviceArgs },
@@ -47,7 +47,7 @@ export async function installWebService(
     });
     logger.info(`Got web service`);
     logger.info(`Installing web service...`);
-    service.install({});
+    await service.install({});
     logger.info(`Installed web service`);
     return service;
   } catch (e) {
