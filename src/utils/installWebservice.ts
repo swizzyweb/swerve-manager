@@ -12,7 +12,7 @@ import os from "node:os";
 import process from "node:process";
 import { getServiceNameFromCurrentDirPackage } from "./getArgs";
 export async function installWebService(
-  packageJson: any,
+  appName: string,
   importPathOrName: string,
   port: number,
   expressApp: any,
@@ -24,7 +24,7 @@ export async function installWebService(
   serviceArgs.appDataRoot;
   const logger = new SwizzyWinstonLogger({
     port,
-    appName: `${packageJson.name}`,
+    appName,
     appDataRoot: serviceArgs.appDataRoot,
     hostName: os.hostname(),
     pid: process.pid,
@@ -33,22 +33,26 @@ export async function installWebService(
     logger.info(
       `Getting webservice package ${packageName} and will run on port ${port}`,
     );
-    logger.info(`Getting tool with path: ${importPathOrName}`);
-    const tool = await require(importPathOrName); //require(packageName as string);
-    logger.info(`Got service with require`);
+    logger.debug(`Getting tool with path: ${importPathOrName}`);
+
+    const fullPath = require.resolve(importPathOrName, {
+      paths: [process.cwd()],
+    });
+    const tool = await require(fullPath); //require(packageName as string);
+    logger.debug(`Got service with require`);
     logger.debug(JSON.stringify(tool));
 
-    logger.info(`Getting web service from tool...`);
+    logger.debug(`Getting web service from tool...`);
     const service = await tool.getWebservice({
       app: expressApp,
       packageName,
       serviceArgs: { ...serviceArgs },
       logger,
     });
-    logger.info(`Got web service`);
-    logger.info(`Installing web service...`);
+    logger.debug(`Got web service`);
+    logger.debug(`Installing web service...`);
     await service.install({});
-    logger.info(`Installed web service`);
+    logger.debug(`Installed web service ${packageName}`);
     return service;
   } catch (e) {
     const exceptionMessage = `Failed to install web service, is it installed with NPM? Check package exists in node_modules

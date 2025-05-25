@@ -24,24 +24,24 @@ export async function run() {
 
     const args = await getArgs(process.argv, gLogger);
 
-    gLogger = new SwizzyWinstonLogger({
+    /*    gLogger = new SwizzyWinstonLogger({
       port: 0,
       //    logDir: args.appDataRoot,
       appName: `[swerve]`,
       hostName: os.hostname(),
       pid: process.pid,
-    });
+    });*/
 
-    gLogger.info(`${JSON.stringify(args)}`);
+    gLogger.debug(`Swerve Args: ${JSON.stringify(args)}`);
 
     const PORT = args.port ?? 3005;
     const webServices = [];
     for (const serviceEntry of Object.entries(args.services)) {
       const service = serviceEntry[1];
-      const packageName = service.packageJson.name;
+      const packageName = service.packageName;
       const importPathOrName = service.servicePath;
       const webservice = await installWebService(
-        service.packageJson,
+        packageName,
         importPathOrName,
         PORT,
         app,
@@ -49,13 +49,17 @@ export async function run() {
           appDataRoot: args.appDataRoot,
           ...service,
           ...service.serviceConfiguration,
+          ...args.serviceArgs,
         },
       );
       webServices.push(webservice);
     }
 
-    gLogger.info(`Starting express app...`);
-    app.listen(PORT, () => {
+    gLogger.debug(`Starting express app...`);
+    await app.listen(PORT, (err) => {
+      if (err) {
+        gLogger.log(err);
+      }
       gLogger.info(
         `${webServices
           .map((service) => {

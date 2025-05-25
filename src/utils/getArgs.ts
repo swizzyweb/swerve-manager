@@ -7,8 +7,8 @@ import process from "node:process";
 import { IConfig, IService, KeyValue } from "../config/config";
 import { SwerveConfigParser } from "../config/config-parser";
 import { deepMerge } from "@swizzyweb/swizzy-common";
+import { getPackageJson } from "./getPackageJson";
 
-console.log(process.argv[1]);
 function getHelpText() {
   return `Help --
 npm run server <serviceName> <port (optional)>
@@ -19,7 +19,7 @@ export function getServiceNameFromCurrentDirPackage(logger: ILogger<any>) {
   try {
     return process.cwd();
   } catch (e) {
-    logger.info(`Error getting package from current dir package.json ${e}`);
+    logger.debug(`Error getting package from current dir package.json ${e}`);
     throw e;
   }
 }
@@ -49,33 +49,35 @@ function getAppDataRoot(
 
 function getService(serviceName: string | undefined, logger: ILogger<any>) {
   try {
+    return getPackageJson(serviceName);
     //		const serviceName = process.argv[2];
     let directory;
     let packageJson;
     if (!serviceName || serviceName === ".") {
       directory = getServiceNameFromCurrentDirPackage(logger);
       packageJson = getPackageJsonFromDirectory(directory);
-    } else {
+    } else if (serviceName.startsWith(".")) {
       directory = serviceName;
-      packageJson = getPackageJsonFromDirectory(
-        path.join(path.dirname(require.resolve(directory))),
-      );
+      const jsonPath = path.join(directory);
+      packageJson = getPackageJsonFromDirectory(path.resolve(jsonPath));
+    } else {
+      return getPackageJson(serviceName);
     }
 
     const response = {
       servicePath: directory,
       packageJson,
     };
-    logger.info(`response ${response}`);
+    logger.debug(`response ${response}`);
     return response;
   } catch (e) {
-    logger.info("Web service name not found at argv[2]");
+    //   logger.debug("Web service name not found at argv[2]");
     const ex = {
       message: "Error getting service name",
       serviceName,
       error: e,
     };
-    console.error(ex);
+    //    logger.debug(JSON.stringify(ex));
     throw ex;
   }
 }
