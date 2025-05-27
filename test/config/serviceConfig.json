@@ -1,9 +1,19 @@
 {
-  "someOtherArgFromConfig": "ThisIsTheArgValue",
-  "someNumberINeed": 100,
-  "shouldTimeout": true,
-  "nestedJson": {
-    "hello": "world",
-    "none": false
+  "port": 3000,
+  "services": {
+    "my-first-web-service1": {
+      "someOtherArgFromConfig": "ThisIsTheArgValue",
+      "someNumberINeed": 100,
+      "shouldTimeout": true,
+      "nestedJson": {
+        "hello": "world",
+        "none": false
+      },
+      "packageName": "@swizzyweb/my-first-web-service",
+      "serviceConfiguration": {
+        "port": 3001,
+        "tableName": "someString"
+      }
+    }
   }
 }
