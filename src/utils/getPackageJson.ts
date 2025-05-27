@@ -41,7 +41,9 @@ export function getPackageJson(
     //      `Could not resolve package.json for "${packageNameOrPath}":`,
     //    err,
     //    );
-    return null;
+    throw new Error(
+      `Could not resolve package.json for "${packageNameOrPath}"`,
+    );
   }
 }
 /**

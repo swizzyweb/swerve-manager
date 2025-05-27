@@ -49,8 +49,6 @@ function getAppDataRoot(
 
 function getService(serviceName: string | undefined, logger: ILogger<any>) {
   try {
-    return getPackageJson(serviceName);
-    //		const serviceName = process.argv[2];
     let directory;
     let packageJson;
     if (!serviceName || serviceName === ".") {
@@ -87,6 +85,7 @@ export interface SwerveArgs extends IConfig {
   port: number;
   appDataRoot?: string;
   serviceArgs?: KeyValue<any>;
+  logLevel: string;
   [key: string]: any;
 }
 
@@ -94,6 +93,7 @@ function getDefaultArgs(): SwerveArgs {
   let currentServiceName = undefined;
 
   return {
+    logLevel: "info",
     services: {},
     port: 3005,
     //appDataRoot: path.join(__dirname + "../../appdata/"),
