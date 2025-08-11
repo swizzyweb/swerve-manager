@@ -1,19 +1,10 @@
 {
-  "name": "@swizzyweb/swerve",
-  "version": "0.5.0",
+  "name": "@swizzyweb/swerve-manager",
+  "version": "0.1.0",
   "description": "swizzy-swerve is a bootstrapper for swizzy web services. This package will bootstrap and run independent swizzy web services.",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "type": "module",
-  "bin": {
-    "swerve": "dist/bootstrapNode.js",
-    "swerven": "dist/bootstrapNode.js",
-    "swerveb": "dist/bootstrapBun.js",
-    "swerved": "dist/bootstrapDeno.js",
-    "swervec": "dist/bootstrapNodeCluster.js",
-    "swervenc": "dist/bootstrapNodeCluster.js",
-    "swervebc": "dist/bootstrapBunCluster.js",
-    "swervedc": "dist/bootstrapDenoCluster.js"
-  },
   "scripts": {
     "build": "tsc",
     "server:ts": "ts-node ./src/bootstrap.ts",

@@ -283,28 +283,28 @@ test("getArgs", () => {
   });
 
   test.it("Should resolve package.json from package name", async () => {
-    const config = await getArgs(["@swizzyweb/swerve"], logger);
-    assert(config.services["@swizzyweb/swerve"].packageJson);
+    const config = await getArgs(["@swizzyweb/swerve-manager"], logger);
+    assert(config.services["@swizzyweb/swerve-manager"].packageJson);
     assert.equal(
-      config.services["@swizzyweb/swerve"].packageJson.name,
-      "@swizzyweb/swerve",
+      config.services["@swizzyweb/swerve-manager"].packageJson.name,
+      "@swizzyweb/swerve-manager",
     );
   });
 
   test.it("Should resolve package.json from absolute path", async () => {
     const config = await getArgs([path.join(__dirname, "..")], logger);
-    assert(config.services["@swizzyweb/swerve"].packageJson);
+    assert(config.services["@swizzyweb/swerve-manager"].packageJson);
     assert.equal(
-      config.services["@swizzyweb/swerve"].packageJson.name,
-      "@swizzyweb/swerve",
+      config.services["@swizzyweb/swerve-manager"].packageJson.name,
+      "@swizzyweb/swerve-manager",
     );
   });
   test.it("Should not throw with no args", async () => {
     const config = await getArgs([], logger);
-    assert(config.services["@swizzyweb/swerve"].packageJson);
+    assert(config.services["@swizzyweb/swerve-manager"].packageJson);
     assert.equal(
-      config.services["@swizzyweb/swerve"].packageJson.name,
-      "@swizzyweb/swerve",
+      config.services["@swizzyweb/swerve-manager"].packageJson.name,
+      "@swizzyweb/swerve-manager",
     );
   });
   test.it("Should work with no port", async () => {
