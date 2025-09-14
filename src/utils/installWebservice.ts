@@ -7,7 +7,7 @@ import {
 } from "@swizzyweb/swizzy-common";
 import { SwizzyWinstonLogger } from "@swizzyweb/swizzy-web-service";
 import { readFileSync } from "fs";
-import path from "path";
+import path from "node:path";
 import os from "node:os";
 import process from "node:process";
 import { getServiceNameFromCurrentDirPackage } from "./getArgs.js";
@@ -75,7 +75,7 @@ Failed to install web service, is it installed with NPM? Check package exists in
 `;
     //		${getHelpText}`;
     gLogger.error(`Failed to install web service`);
-    throw e; //new Error(exceptionMessage);
+    throw Error(exceptionMessage); //new Error(exceptionMessage);
   }
 }
 

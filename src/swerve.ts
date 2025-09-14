@@ -15,7 +15,7 @@ import {
 import os from "node:os";
 import process from "node:process";
 import { ILogger } from "@swizzyweb/swizzy-common";
-import path from "path";
+import path from "node:path";
 import { mkdirSync } from "node:fs";
 
 export interface ISwerveManager {
@@ -302,7 +302,9 @@ Failed to install web service, is it installed with NPM? Check package exists in
 			port: ${port}
 `;
       //		${getHelpText}`;
-      gLogger.error(`Failed to install web service`);
+      gLogger.error(
+        `Failed to install web service, error: ${e?.message} stack: ${e?.stack}`,
+      );
       throw e; //new Error(exceptionMessage);
     }
   }
@@ -343,18 +345,21 @@ Failed to install web service, is it installed with NPM? Check package exists in
       ports.push(port);
       //console.log(webService);
       await webService.uninstall({});
-      const indexes = this.webServices.map((val, index, array) => {
-        //console.log(
-        //            `instanceInSwerve: ${val.instanceId} instanceInWebService ${webService.instanceId}`,
-        //          );
-        if (val.instanceId == webService.instanceId) {
-          return index;
-        }
-      });
+      const indexes = this.webServices
+        .map((val, index, array) => {
+          //console.log(
+          //            `instanceInSwerve: ${val.instanceId} instanceInWebService ${webService.instanceId}`,
+          //          );
+          if (val.instanceId == webService.instanceId) {
+            return index;
+          }
+          return undefined;
+        })
+        .filter((val) => val != undefined);
       //.filter((val) => val);
       if (indexes.length > 1) {
         throw new Error(
-          `Found multiple indexes for webservice instance ${webService.instanceId}`,
+          `Found multiple indexes for webservice instance ${webService.instanceId} ${indexes}`,
         );
       } else if (indexes.length == 0) {
         throw new Error(

@@ -1,6 +1,6 @@
-import * as fs from "fs";
-import * as path from "path";
-import { fileURLToPath, pathToFileURL } from "url";
+import * as fs from "node:fs";
+import * as path from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 /**
  * Determines whether the input string is a relative or absolute path.

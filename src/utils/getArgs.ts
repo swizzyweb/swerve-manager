@@ -1,8 +1,6 @@
 // @ts-ignore
-import express, { Request, Response } from "@swizzyweb/express";
-import { getPackageJsonFromDirectory, ILogger } from "@swizzyweb/swizzy-common";
-import { readFileSync } from "fs";
-import path from "path";
+import { ILogger } from "@swizzyweb/swizzy-common";
+import path from "node:path";
 import process from "node:process";
 import { IConfig, IService, KeyValue } from "../config/index.js";
 import { SwerveConfigParser } from "../config/config-parser.js";

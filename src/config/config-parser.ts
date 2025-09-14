@@ -1,6 +1,6 @@
-import { readFile } from "fs/promises";
+import { readFile } from "node:fs/promises";
 import { IConfig } from "./config.js";
-import path from "path";
+import path from "node:path";
 
 export interface IAsyncConfigParser<CONFIG> {
   parse(path: string): Promise<CONFIG>;
