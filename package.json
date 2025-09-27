@@ -1,6 +1,6 @@
 {
   "name": "@swizzyweb/swerve-manager",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "swizzy-swerve is a bootstrapper for swizzy web services. This package will bootstrap and run independent swizzy web services.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -18,14 +18,14 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@swizzyweb/express": "^4.19.2",
-    "@types/node": "^22.7.7",
-    "typescript": "^5.6.3"
+    "@types/node": "^22.18.6",
+    "typescript": "^5.9.2"
   },
   "dependencies": {
     "@swizzyweb/swizzy-common": "^0.3.2",
-    "@swizzyweb/swizzy-web-service": "^0.5.3",
-    "bun": "^1.2.15",
-    "deno": "^2.3.6"
+    "@swizzyweb/swizzy-web-service": "^0.5.4",
+    "bun": "^1.2.22",
+    "deno": "^2.5.2"
   },
   "repository": {
     "type": "git",
