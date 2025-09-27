@@ -3,6 +3,10 @@
 swizzy-swerve is a bootstrapper for swizzy web services. This package will bootstrap and run
 independent swizzy web services.
 
+## Docs
+
+https://swizzyweb.github.io/swerve-manager/
+
 ### Supported commands
 
 swerve: synonym for swerven
