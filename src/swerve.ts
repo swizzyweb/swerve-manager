@@ -1,7 +1,6 @@
 // @ts-ignore
 import express, { Application } from "@swizzyweb/express";
 import {
-  getFullImportPath,
   getLoggerForService,
   installWebService,
   SwerveArgs,
@@ -17,6 +16,7 @@ import process from "node:process";
 import { ILogger } from "@swizzyweb/swizzy-common";
 import path from "node:path";
 import { mkdirSync } from "node:fs";
+import { getFullImportPath } from "./utils/getFullImportPath.js";
 
 export interface ISwerveManager {
   run(request: RunRequest): Promise<RunResponse>;
@@ -126,7 +126,8 @@ export class SwerveManager implements ISwerveManager {
         const app = this.apps[`${port}`].app;
 
         const service = serviceEntry[1];
-        const packageName = serviceEntry[0];
+        const serviceName = serviceEntry[0];
+        const packageName = service.packageName;
         const importPathOrName = service.servicePath ?? service.packageName;
         gLogger.debug(`importPathOrName ${importPathOrName}`);
         const serviceArgs: SwerveArgs = {
@@ -257,9 +258,13 @@ export class SwerveManager implements ISwerveManager {
         `Getting webservice package ${packageName} and will run on port ${port}`,
       );
 
-      gLogger.debug(`Getting tool with path: ${importPathOrName}`);
-
-      const fullPath = await getFullImportPath(importPathOrName);
+      if (packageName) {
+        gLogger.debug(`Getting web service with name ${packageName}`);
+      } else {
+        gLogger.debug(`Getting webservice with path: ${importPathOrName}`);
+      }
+      const fullPath =
+        packageName ?? (await getFullImportPath(importPathOrName));
       const tool = await import(fullPath); //require(fullPath); //require(packageName as string);
 
       gLogger.debug(`Got service with require: ${JSON.stringify(tool)}`);
