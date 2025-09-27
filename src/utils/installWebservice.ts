@@ -79,9 +79,7 @@ Failed to install web service, is it installed with NPM? Check package exists in
   }
 }
 
-export async function getFullImportPath(
-  importPathOrName: string,
-): Promise<string> {
+async function getFullImportPath(importPathOrName: string): Promise<string> {
   const importPath = importPathOrName.startsWith(".")
     ? path.join(process.cwd(), importPathOrName)
     : importPathOrName;
