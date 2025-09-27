@@ -1,4 +1,6 @@
 // cross-runtime getFullImportPath.ts
+import { promises as fs } from "node:fs";
+import { pathToFileURL } from "node:url";
 
 // Runtime detection
 // @ts-ignore
@@ -57,4 +59,33 @@ export async function getFullImportPath(
   }
 
   return importPath;
+}
+
+export async function resolvePackageEntry(pkgDir: string): Promise<string> {
+  const pkgJsonPath = join(pkgDir, "package.json");
+  let entry: string | undefined;
+
+  try {
+    const pkgJsonRaw = await fs.readFile(pkgJsonPath, "utf-8");
+    const pkgJson = JSON.parse(pkgJsonRaw);
+
+    if (pkgJson.exports && typeof pkgJson.exports === "string") {
+      // Simple "exports": "./esm/index.js"
+      entry = pkgJson.exports;
+    } else if (pkgJson.module) {
+      entry = pkgJson.module;
+    } else if (pkgJson.main) {
+      entry = pkgJson.main;
+    }
+  } catch {
+    // no package.json, fallback below
+  }
+
+  if (!entry) {
+    // fallback to index.js
+    entry = "index.js";
+  }
+
+  const absPath = join(pkgDir, entry);
+  return pathToFileURL(absPath).href; // usable in await import()
 }

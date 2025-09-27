@@ -16,7 +16,10 @@ import process from "node:process";
 import { ILogger } from "@swizzyweb/swizzy-common";
 import path from "node:path";
 import { mkdirSync } from "node:fs";
-import { getFullImportPath } from "./utils/getFullImportPath.js";
+import {
+  getFullImportPath,
+  resolvePackageEntry,
+} from "./utils/getFullImportPath.js";
 
 export interface ISwerveManager {
   run(request: RunRequest): Promise<RunResponse>;
@@ -74,6 +77,8 @@ export type Apps = {
 export interface SwerveManagerProps {
   apps?: Apps;
   webServices?: WebService<any>[];
+  nodeModulesPath?: string;
+  logger?: ILogger<any> | undefined;
 }
 
 export interface WebServiceConfiguration {}
@@ -86,9 +91,19 @@ export class SwerveManager implements ISwerveManager {
   apps: Apps;
   webServices: WebService<any>[];
   configurations: WebServiceConfigurations;
+  nodeModulesPath: string;
+  logger: ILogger<any>;
   constructor(props: SwerveManagerProps) {
     this.apps = props.apps ?? {};
     this.webServices = props.webServices ?? [];
+    this.nodeModulesPath = props.nodeModulesPath;
+    this.logger =
+      props.logger ??
+      new SwizzyWinstonLogger({
+        appName: "swerve-manager",
+        port: -1,
+        hostName: os.hostname(),
+      });
   }
 
   async run(request: RunRequest): Promise<RunResponse> {
@@ -128,8 +143,7 @@ export class SwerveManager implements ISwerveManager {
         const service = serviceEntry[1];
         const serviceName = serviceEntry[0];
         const packageName = service.packageName;
-        const importPathOrName = service.servicePath ?? service.packageName;
-        gLogger.debug(`importPathOrName ${importPathOrName}`);
+        gLogger.debug(`servicePath: ${service.servicePath}`);
         const serviceArgs: SwerveArgs = {
           ...service,
           ...service.serviceConfiguration,
@@ -137,9 +151,9 @@ export class SwerveManager implements ISwerveManager {
         };
 
         const webservice = await this.installWebService({
-          serviceKey: serviceEntry[0],
+          serviceKey: serviceName,
           packageName,
-          importPathOrName,
+          servicePath: service.servicePath,
           port,
           app,
           appDataRoot: args.appDataRoot,
@@ -204,12 +218,10 @@ export class SwerveManager implements ISwerveManager {
       for (const serviceEntry of Object.entries(args.services)) {
         const service = serviceEntry[1];
         const packageName = service.packageName;
-        const importPathOrName =
-          service.servicePath ?? service.serviceArgs.servicePath ?? packageName;
         const webservice = await this.installWebService({
           serviceKey: serviceEntry[0],
           packageName,
-          importPathOrName,
+          servicePath: service.servicePath,
           port: PORT,
           app,
           appDataRoot: args.appDataRoot,
@@ -233,7 +245,7 @@ export class SwerveManager implements ISwerveManager {
   async installWebService(props: {
     //
     serviceKey: string;
-    importPathOrName: string;
+    servicePath: string;
     app: Application;
     appDataRoot: string;
     packageName: string;
@@ -241,7 +253,6 @@ export class SwerveManager implements ISwerveManager {
     gLogger: ILogger<any>;
     serviceArgs: { [key: string]: any };
   }) {
-    //  const packageName = importPathOrName;
     const {
       app,
       appDataRoot,
@@ -249,7 +260,7 @@ export class SwerveManager implements ISwerveManager {
       port,
       gLogger,
       serviceArgs,
-      importPathOrName,
+      servicePath,
       serviceKey,
     } = props;
 
@@ -261,11 +272,11 @@ export class SwerveManager implements ISwerveManager {
       if (packageName) {
         gLogger.debug(`Getting web service with name ${packageName}`);
       } else {
-        gLogger.debug(`Getting webservice with path: ${importPathOrName}`);
+        gLogger.debug(`Getting webservice with path: ${servicePath}`);
       }
-      const fullPath =
-        packageName ?? (await getFullImportPath(importPathOrName));
-      const tool = await import(fullPath); //require(fullPath); //require(packageName as string);
+
+      const fullPath = await this.getImportName(packageName, servicePath);
+      const tool = await import(fullPath);
 
       gLogger.debug(`Got service with require: ${JSON.stringify(tool)}`);
       gLogger.debug(`Getting web service from tool...`);
@@ -286,6 +297,7 @@ export class SwerveManager implements ISwerveManager {
         port,
         app,
         packageName,
+        servicePath,
         serviceArgs: { ...serviceArgs },
         logger,
       });
@@ -311,6 +323,25 @@ Failed to install web service, is it installed with NPM? Check package exists in
         `Failed to install web service, error: ${e?.message} stack: ${e?.stack}`,
       );
       throw e; //new Error(exceptionMessage);
+    }
+  }
+
+  async getImportName(packageName: string, servicePath: string) {
+    const nodeModulesPath = this.nodeModulesPath;
+    this.logger.debug(`getImportPathName: modulesPath: ${nodeModulesPath}`);
+    if (servicePath) {
+      return await getFullImportPath(servicePath);
+    } else {
+      if (nodeModulesPath) {
+        this.logger.debug(
+          `Getting path with nodeModulesPath and packageName ${nodeModulesPath} ${packageName}`,
+        );
+        return await resolvePackageEntry(
+          path.join(nodeModulesPath, packageName),
+        );
+      } else {
+        return packageName;
+      }
     }
   }
 
