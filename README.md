@@ -205,7 +205,7 @@ appDataPath: "/appDataRoot/appdata/serviceName/"
     },
     "friendlyImportServiceName": {
       "port": 3002,
-      "servicePath": "@swizzyweb/dyn-serve-web-service" // running installed web service package
+      "packageName": "@swizzyweb/dyn-serve-web-service" // running installed web service package
     },
     "friendlyNeighborServiceName": {
       "port": 3002,
@@ -220,4 +220,10 @@ appDataPath: "/appDataRoot/appdata/serviceName/"
 
 ```
 swerve --config my-web-service-config.json
+```
+
+# Generate Docs
+
+```
+npx typedoc
 ```
