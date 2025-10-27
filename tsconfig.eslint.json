@@ -1,0 +1,13 @@
+// tsconfig.eslint.json
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "test/**/*", // Include your test files
+    "src/**/*" // Include your source files
+  ],
+  "exclude": [
+    // Ensure you exclude the dist folder, test files from build, etc.
+    "dist/**/*",
+    "**/*.spec.ts"
+  ]
+}
