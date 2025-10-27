@@ -274,9 +274,16 @@ export class SwerveManager implements ISwerveManager {
       } else {
         gLogger.debug(`Getting webservice with path: ${servicePath}`);
       }
-
+      let firstTool;
+      try {
+        firstTool = await import(packageName ?? servicePath);
+      } catch (e: any) {
+        gLogger.warn(
+          `Unable to import from raw tool path ${packageName ?? servicePath}, trying with import name. Err: ${e?.message}. Stack: ${e?.stack}`,
+        );
+      }
       const fullPath = await this.getImportName(packageName, servicePath);
-      const tool = await import(fullPath);
+      const tool = firstTool ?? (await import(fullPath));
 
       gLogger.debug(`Got service with require: ${JSON.stringify(tool)}`);
       gLogger.debug(`Getting web service from tool...`);
