@@ -269,17 +269,18 @@ export class SwerveManager implements ISwerveManager {
         `Getting webservice package ${packageName} and will run on port ${port}`,
       );
 
-      if (packageName) {
+      if (servicePath ?? packageName) {
         gLogger.debug(`Getting web service with name ${packageName}`);
       } else {
         gLogger.debug(`Getting webservice with path: ${servicePath}`);
       }
       let firstTool;
       try {
-        firstTool = await import(packageName ?? servicePath);
+        firstTool = await import(servicePath ?? packageName);
+        gLogger.info(`Imported from raw path ${servicePath}`);
       } catch (e: any) {
         gLogger.warn(
-          `Unable to import from raw tool path ${packageName ?? servicePath}, trying with import name. Err: ${e?.message}. Stack: ${e?.stack}`,
+          `Unable to import from raw tool path ${servicePath ?? packageName}, trying with import name. Err: ${e?.message}. Stack: ${e?.stack}`,
         );
       }
       const fullPath = await this.getImportName(packageName, servicePath);
