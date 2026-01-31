@@ -45,6 +45,7 @@ export function getPackageJson(
         //    console.log(entrypoint);
         //   console.error(`Entrypoint is ${entrypoint}`);
         //        throw `Entrypoint is ${entrypoint}`;
+        console.log(`dir name in ${entrypoint}`);
         return { packageJson, servicePath: entrypoint };
       }
       dir = path.dirname(dir);
