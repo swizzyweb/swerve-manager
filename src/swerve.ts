@@ -1,10 +1,5 @@
-// @ts-ignore
-import express, { Application } from "@swizzyweb/express";
-import {
-  getLoggerForService,
-  installWebService,
-  SwerveArgs,
-} from "./utils/index.js";
+import express, { Application } from "express";
+import { getLoggerForService, SwerveArgs } from "./utils/index.js";
 import {
   AnyServer,
   IWebService,
@@ -130,7 +125,7 @@ export class SwerveManager implements ISwerveManager {
 
     try {
       const webServices: WebService<any>[] = [];
-      const newApps: { [port: number]: Application } = {};
+      const newApps: Apps = {};
       for (const serviceEntry of Object.entries(args.services)) {
         const port = serviceEntry[1].port ?? args.port;
         if (!this.apps[`${port}`]) {

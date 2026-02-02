@@ -1,32 +1,23 @@
 // eslint.config.js
-import tsParser from "@typescript-eslint/parser";
-import tsPlugin from "@typescript-eslint/eslint-plugin";
+import { defineConfig } from "eslint/config";
+
+import tseslint from "@typescript-eslint/eslint-plugin";
+import parser from "@typescript-eslint/parser";
 
 export default [
   {
-    ignores: [
-      "dist/**", // Now ignores all of dist
-      "coverage/**", // Resolves unused eslint-disable warnings
-      "test/**",
-    ],
-  },
-  {
-    files: ["**/*.ts", "**/*.tsx"],
-    plugins: {
-      "@typescript-eslint": tsPlugin,
-    },
+    files: ["**/*.ts"],
     languageOptions: {
-      parser: tsParser,
+      parser,
       parserOptions: {
-        // Update the project to point to your new file
-        project: "./tsconfig.eslint.json",
-        ecmaVersion: "latest",
-        sourceType: "module",
+        project: "./tsconfig.json",
       },
+    },
+    plugins: {
+      "@typescript-eslint": tseslint,
     },
     rules: {
       "@typescript-eslint/no-floating-promises": "error",
-      // ... other TypeScript rules
     },
   },
 ];

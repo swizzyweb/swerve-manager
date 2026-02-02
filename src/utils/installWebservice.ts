@@ -1,16 +1,7 @@
-// @ts-ignore
-import express, { Request, Response } from "@swizzyweb/express";
-import {
-  BrowserLogger,
-  getPackageJsonFromDirectory,
-  ILogger,
-} from "@swizzyweb/swizzy-common";
-import { SwizzyWinstonLogger } from "@swizzyweb/swizzy-web-service";
-import { readFileSync } from "fs";
+import { ILogger } from "@swizzyweb/swizzy-common";
 import path from "node:path";
 import os from "node:os";
 import process from "node:process";
-import { getServiceNameFromCurrentDirPackage } from "./getArgs.js";
 import { mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 

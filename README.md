@@ -227,3 +227,7 @@ swerve --config my-web-service-config.json
 ```
 npx typedoc
 ```
+
+# Breaking changes
+
+v0.3.0 upgrades express dependency to 5.x
