@@ -19,17 +19,12 @@ export function getPackageJson(
 ): { packageJson: Record<string, any>; servicePath: string } | null {
   try {
     // Step 1: Resolve to an absolute path
-    //    const resolvedEntry = isPath(packageNameOrPath)
-    //    ? require.resolve(path.resolve(packageNameOrPath))
-    //      : //      : require.resolve(packageNameOrPath);
-    //        require.resolve(packageNameOrPath, { paths: [process.cwd()] });
     const resolvedEntry = isPath(packageNameOrPath)
       ? pathToFileURL(path.resolve(packageNameOrPath)).href
       : import.meta.resolve(packageNameOrPath);
 
     // Step 2: Traverse upward to find the nearest package.json
     let dir = fileURLToPath(resolvedEntry); //path.dirname(resolvedEntry);
-    //    console.log(dir);
     while (dir !== path.parse(dir).root) {
       const pkgPath = path.join(dir, "package.json");
       if (fs.existsSync(pkgPath)) {
@@ -40,12 +35,8 @@ export function getPackageJson(
         } else if (dir.startsWith(".")) {
           dir = path.join(process.cwd(), dir);
         }
-        //      console.log(dir);
+
         const entrypoint = path.join(dir, packageJson.main);
-        //    console.log(entrypoint);
-        //   console.error(`Entrypoint is ${entrypoint}`);
-        //        throw `Entrypoint is ${entrypoint}`;
-        console.log(`dir name in ${entrypoint}`);
         return { packageJson, servicePath: entrypoint };
       }
       dir = path.dirname(dir);
@@ -85,7 +76,6 @@ export function getPackageJsonOrig(
 
     return null;
   } catch (error) {
-    //console.error(`Failed to resolve package "${packageName}":`, error);
     return null;
   }
 }

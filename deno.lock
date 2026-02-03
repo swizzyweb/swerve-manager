@@ -2,7 +2,6 @@
   "version": "5",
   "specifiers": {
     "npm:@swizzyweb/swizzy-common@~0.3.3": "0.3.3",
-    "npm:@swizzyweb/swizzy-web-service@0.6": "0.6.0_winston@3.19.0",
     "npm:@types/express@^5.0.6": "5.0.6",
     "npm:@types/node@^22.18.6": "22.19.7",
     "npm:@typescript-eslint/eslint-plugin@^8.54.0": "8.54.0_@typescript-eslint+parser@8.54.0__eslint@9.39.2__typescript@5.9.3_eslint@9.39.2_typescript@5.9.3",
@@ -1213,7 +1212,7 @@
     "packageJson": {
       "dependencies": [
         "npm:@swizzyweb/swizzy-common@~0.3.3",
-        "npm:@swizzyweb/swizzy-web-service@0.6",
+        "npm:@swizzyweb/swizzy-web-service@~0.6.1",
         "npm:@types/express@^5.0.6",
         "npm:@types/node@^22.18.6",
         "npm:@typescript-eslint/eslint-plugin@^8.54.0",
