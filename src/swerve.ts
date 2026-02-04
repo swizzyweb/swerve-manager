@@ -1,3 +1,4 @@
+// @deno-types="npm:@types/express@5"
 import express, { Application } from "express";
 import { getLoggerForService, SwerveArgs } from "./utils/index.js";
 import {
