@@ -1,11 +1,12 @@
 // @ts-ignore
 import { ILogger } from "@swizzyweb/swizzy-common";
 import path from "node:path";
-import process from "node:process";
+import process, { cwd } from "node:process";
 import { IConfig, IService, KeyValue } from "../config/index.js";
 import { SwerveConfigParser } from "../config/config-parser.js";
 import { deepMerge } from "@swizzyweb/swizzy-common";
 import { getPackageJson } from "./getPackageJson.js";
+import { existsSync, readFileSync } from "node:fs";
 
 function getHelpText() {
   return `Help --
@@ -202,9 +203,17 @@ export async function getArgs(
       //        serviceEntry[1].servicePath ?? serviceEntry[1].packageName;
       if (!servicePath) {
         serviceEntry[1].servicePath = packageName!;
-        //        throw new Error(
-        //        `servicePath or packageName must be set in service configurations`,
-        //      );
+        const localPackage = path.join(cwd(), "node_modules", packageName);
+        const packageJsonPath = path.join(localPackage, "package.json");
+        if (existsSync(path.join(packageJsonPath))) {
+          const json = JSON.parse(readFileSync(packageJsonPath, "utf-8"));
+          const main = json.main;
+          serviceEntry[1].servicePath = path.join(localPackage, main);
+        } else {
+          serviceEntry[1].servicePath = getPackageJson(
+            packageName!,
+          ).servicePath;
+        }
       } else {
         const serviceData = getService(servicePath, logger);
         serviceEntry[1].packageName = serviceData.packageJson?.name;

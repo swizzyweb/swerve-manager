@@ -9,7 +9,7 @@
         "hello": "world",
         "none": false
       },
-      "packageName": "@swizzyweb/my-first-web-service",
+      "packageName": "@swizzyweb/swizzy-web-service",
       "serviceConfiguration": {
         "port": 3001,
         "tableName": "someString"
