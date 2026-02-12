@@ -75,6 +75,7 @@ export interface SwerveManagerProps {
   webServices?: WebService<any>[];
   nodeModulesPath?: string;
   logger?: ILogger<any> | undefined;
+  noLogFile?: boolean;
 }
 
 export interface WebServiceConfiguration {}
@@ -99,6 +100,7 @@ export class SwerveManager implements ISwerveManager {
         appName: "swerve-manager",
         port: -1,
         hostName: os.hostname(),
+        noLogFile: props.noLogFile ?? true,
       });
   }
 
@@ -122,6 +124,7 @@ export class SwerveManager implements ISwerveManager {
       hostName: os.hostname(),
       ownerName: "swerve",
       pid: process.pid,
+      noLogFile: args.noLogFile,
     });
 
     try {
@@ -190,23 +193,15 @@ export class SwerveManager implements ISwerveManager {
     const { app, args } = props;
     let gLogger = new SwizzyWinstonLogger({
       port: 0,
-      logLevel: process.env.LOG_LEVEL ?? "info",
+      logLevel: process.env.LOG_LEVEL ?? args.logLevel ?? "info",
       appDataRoot: args.appDataRoot,
       appName: `swerve`,
       hostName: os.hostname(),
       pid: process.pid,
+      noLogFile: args.noLogFile,
     });
 
     try {
-      gLogger = new SwizzyWinstonLogger({
-        logLevel: args.serviceArgs.logLevel ?? process.env.LOG_LEVEL ?? "info",
-        port: args.port,
-        logDir: args.appDataRoot,
-        appName: `swerve`,
-        hostName: os.hostname(),
-        pid: process.pid,
-      });
-
       gLogger.debug(`Swerve Args: ${JSON.stringify(args)}`);
 
       const PORT = args.port ?? 3005;
@@ -306,7 +301,7 @@ export class SwerveManager implements ISwerveManager {
         logger,
       });
 
-      logger.debug(`Got web service`);
+      gLogger.debug(`Got web service`);
 
       gLogger.debug(`Installing web service...`);
       await service.install({});

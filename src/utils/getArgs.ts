@@ -86,6 +86,7 @@ export interface SwerveArgs extends IConfig {
   appDataRoot?: string;
   serviceArgs?: KeyValue<any>;
   logLevel: string;
+  noLogFile: boolean;
   [key: string]: any;
 }
 
@@ -97,6 +98,7 @@ function getDefaultArgs(): SwerveArgs {
     services: {},
     port: 3005,
     serviceArgs: {},
+    noLogFile: false,
   };
 }
 const ARG_PREFIX = "--";
@@ -140,6 +142,11 @@ function tryParseNumberArg(val): number | boolean {
 
 function parseArgValue(val: string, logger: ILogger<any>) {
   try {
+    if (`${val}`.toLocaleLowerCase() == "true") {
+      return true;
+    } else if (`${val}`.toLocaleLowerCase() == "false") {
+      return false;
+    }
     return JSON.parse(val);
   } catch (e) {
     logger.warn(
@@ -156,7 +163,8 @@ export async function getArgs(
   logger: ILogger<any>,
 ): Promise<SwerveArgs> {
   let argKey = undefined;
-  let swerveArgs = getDefaultArgs();
+  let defaultArgs = getDefaultArgs();
+  let swerveArgs = defaultArgs;
   let configFromFile: IConfig;
   const serviceCounts = new Map<string, number>();
   for (let i = 2; i < args.length; i++) {
@@ -172,8 +180,12 @@ export async function getArgs(
         argKey = undefined;
         continue;
       }
+      if (Object.keys(defaultArgs).includes(argKey)) {
+        swerveArgs[argKey] = parseArgValue(nextVal, logger);
+      }
       swerveArgs.serviceArgs[argKey] = parseArgValue(nextVal, logger);
       argKey = undefined;
+
       continue;
     }
     if (nextVal.startsWith(ARG_PREFIX)) {

@@ -105,7 +105,7 @@ export function getLoggerForService(
   const hostName = os.hostname();
   const logDir = serviceArgs.logDir;
   const appDataRoot = serviceArgs.appDataRoot;
-
+  const noLogFile = serviceArgs.noLogFile ?? gLogger.getLoggerProps().noLogFile;
   return gLogger.clone({
     port,
     appName,
@@ -116,5 +116,6 @@ export function getLoggerForService(
     logLevel,
     ownerName,
     logFileName,
+    noLogFile,
   });
 }
