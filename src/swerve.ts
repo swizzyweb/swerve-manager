@@ -4,12 +4,12 @@ import { getLoggerForService, SwerveArgs } from "./utils/index.js";
 import {
   AnyServer,
   IWebService,
-  SwizzyWinstonLogger,
   WebService,
 } from "@swizzyweb/swizzy-web-service";
 import os from "node:os";
 import process from "node:process";
-import { ILogger } from "@swizzyweb/swizzy-common";
+import { SwizzyWinstonLogger, ILogger } from "@swizzyweb/swizzy-common";
+
 import path from "node:path";
 import { mkdirSync } from "node:fs";
 import {
@@ -148,7 +148,6 @@ export class SwerveManager implements ISwerveManager {
           ...service.serviceConfiguration,
           ...args.serviceArgs,
         };
-
         const webservice = await this.installWebService({
           serviceKey: serviceName,
           packageName,
@@ -182,10 +181,8 @@ export class SwerveManager implements ISwerveManager {
         gLogger.info(`${webService.name} running on port ${webService.port}`);
       }
       return webServices;
-    } catch (e) {
-      gLogger.error(
-        `Error occurred initializing service\n ${e.message}\n ${e.stack ?? {}}`,
-      );
+    } catch (e: any) {
+      throw new Error(`Error occurred initializing service`, { cause: e });
     }
   }
 
