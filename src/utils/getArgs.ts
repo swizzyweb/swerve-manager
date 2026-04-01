@@ -183,7 +183,20 @@ export async function getArgs(
       if (Object.keys(defaultArgs).includes(argKey)) {
         swerveArgs[argKey] = parseArgValue(nextVal, logger);
       }
+
+      /*
+       // Add arg if first time specified, else append as list for array type args.
+       if (swerveArgs.serviceArgs[argKey]) {
+        if (Array.isArray(swerveArgs.serviceArgs[argKey])) {
+          swerveArgs.serviceArgs[argKey].push(parseArgValue(nextVal, logger));
+        } else {
+          const newArgs = [swerveArgs.serviceArgs[argKey]];
+          newArgs.push(parseArgValue(nextVal, logger));
+          swerveArgs.serviceArgs[argKey] = newArgs;
+        }
+      } else {*/
       swerveArgs.serviceArgs[argKey] = parseArgValue(nextVal, logger);
+      //      }
       argKey = undefined;
 
       continue;

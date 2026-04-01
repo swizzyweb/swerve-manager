@@ -188,7 +188,11 @@ port: number,
 app: expressApp,
 logger: ILogger,
 appDataPath: "/appDataRoot/appdata/serviceName/"
-...serviceArgs // Anything else (from service config or swerve command args)
+serviceArgs: {
+"serviceName": {
+"additionalArg": "... swizzy-web-service defined arguments specific to the swizzy-web-service"
+}
+} // Anything else (from service config or swerve command args)
 }
 ```
 
